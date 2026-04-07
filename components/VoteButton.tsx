@@ -7,18 +7,32 @@ import { VOTING_ADDRESS, PRIVATE_VOTING_ABI } from '../lib/contracts';
 export function VoteButton({ proposalId, vote, label, className }: any) {
   const [loading, setLoading] = useState(false);
   const [txHash, setTxHash] = useState('');
+  const { address } = useAccount();
   const { writeContractAsync } = useWriteContract();
 
   const handleVote = async () => {
     setLoading(true);
     setTxHash('');
     try {
-      const encrypted = await fhishClient.encrypt(vote);
+      // 1. Initialize TFHE WASM if not already done
+      await fhishClient.init();
+
+      // 2. Clear real encryption input creation
+      const input = fhishClient.createEncryptedInput(VOTING_ADDRESS, address!);
+      input.add32(vote);
+      const encrypted = await input.encrypt();
+
+      // 3. Execute Transaction with handle and proof
       const hash = await writeContractAsync({
         address: VOTING_ADDRESS as any,
         abi: PRIVATE_VOTING_ABI,
-        functionName: 'castVote',
-        args: [proposalId, encrypted.ciphertext, vote === 1],
+        functionName: 'vote',
+        args: [
+          encrypted.handles[0], 
+          encrypted.inputProof,
+          vote === 1 ? encrypted.handles[0] : "0x0000000000000000000000000000000000000000000000000000000000000000",
+          encrypted.inputProof
+        ],
       });
       setTxHash(hash);
     } catch (e: any) {

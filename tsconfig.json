@@ -19,7 +19,8 @@
       }
     ],
     "paths": {
-      "@/*": ["./*"]
+      "@/*": ["./*"],
+      "@fhish/sdk": ["../packages/fhish-sdk-v2/src/index.ts"]
     }
   },
   "include": [
