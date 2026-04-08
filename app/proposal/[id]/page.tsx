@@ -1,13 +1,24 @@
 "use client";
+import { use } from "react";
 import { useAccount, useReadContract } from "wagmi";
 import { VOTING_ADDRESS, PRIVATE_VOTING_ABI } from "../../../lib/contracts";
 import { VoteButton } from "../../../components/VoteButton";
 import { RevealButton } from "../../../components/RevealButton";
 import { ConnectWallet } from "../../../components/ConnectWallet";
 
-export default function ProposalDetail({ params }: { params: { id: string } }) {
-  const proposalId = parseInt(params.id);
+function log(prefix: string, ...args: any[]) {
+  console.log(`[ProposalPage] ${prefix}`, ...args);
+}
+
+export default function ProposalDetail({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = use(params);
+  const proposalId = parseInt(id);
   const { isConnected } = useAccount();
+
+  log("RENDER — proposalId=", proposalId, "connected=", isConnected);
+  log("  NEXT_PUBLIC_VOTING_CONTRACT=", VOTING_ADDRESS);
+  log("  NEXT_PUBLIC_GATEWAY_URL=", process.env.NEXT_PUBLIC_FHISH_GATEWAY_URL);
+  log("  NEXT_PUBLIC_RPC_URL=", process.env.NEXT_PUBLIC_RPC_URL);
 
   const { data: isDecrypted } = useReadContract({
     address: VOTING_ADDRESS as `0x${string}`,

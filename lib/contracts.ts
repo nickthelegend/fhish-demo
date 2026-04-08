@@ -7,9 +7,7 @@ export const PRIVATE_VOTING_ABI = [
     name: "vote",
     inputs: [
       { name: "handleA", type: "bytes32" },
-      { name: "proofA", type: "bytes" },
       { name: "handleB", type: "bytes32" },
-      { name: "proofB", type: "bytes" },
     ],
     outputs: [],
     stateMutability: "nonpayable",
@@ -52,7 +50,11 @@ export const PRIVATE_VOTING_ABI = [
   {
     type: "event",
     name: "VoteCast",
-    inputs: [{ name: "voter", type: "address", indexed: true }],
+    inputs: [
+      { name: "voter", type: "address", indexed: true },
+      { name: "handleA", type: "bytes32", indexed: false },
+      { name: "handleB", type: "bytes32", indexed: false },
+    ],
   },
   {
     type: "event",

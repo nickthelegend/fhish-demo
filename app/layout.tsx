@@ -1,6 +1,7 @@
 import { Inter } from 'next/font/google';
 import './globals.css';
-import { Providers } from './Providers';
+import { ClientProviders } from './ClientProviders';
+import { DebugPanel } from '../components/DebugPanel';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -13,9 +14,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" className="bg-black text-white">
       <body className={`${inter.className} min-h-screen container mx-auto p-4`}>
-        <Providers>
+        <ClientProviders>
           {children}
-        </Providers>
+          <DebugPanel />
+        </ClientProviders>
       </body>
     </html>
   );
