@@ -1,12 +1,65 @@
-export const GATEWAY_ADDRESS = "0x2279B7A0a67DB372996a5FaB50D91eAA73d2eBe6";
-export const VOTING_ADDRESS = "0x8A791620dd6260079BF849Dc5567aDC3F2FdC318";
+export const VOTING_ADDRESS = process.env.NEXT_PUBLIC_VOTING_CONTRACT || "";
+export const GATEWAY_ADDRESS = process.env.NEXT_PUBLIC_GATEWAY_CONTRACT || "";
 
-// ABI for PrivateVotingV2 (from Phase 3)
 export const PRIVATE_VOTING_ABI = [
-  "function vote(bytes32 handleA, bytes calldata proofA, bytes32 handleB, bytes calldata proofB) external",
-  "function tallyOptionA() external view returns (uint256)",
-  "function tallyOptionB() external view returns (uint256)",
-  "function getProposalStatus(uint256 proposalId) external view returns (bool active, bool revealed, uint32 yesVotes, uint32 noVotes)",
-  "function requestTallyReveal(uint256 proposalId) external",
-  "event VoteCast(address indexed voter)"
+  {
+    type: "function",
+    name: "vote",
+    inputs: [
+      { name: "handleA", type: "bytes32" },
+      { name: "proofA", type: "bytes" },
+      { name: "handleB", type: "bytes32" },
+      { name: "proofB", type: "bytes" },
+    ],
+    outputs: [],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    name: "requestResult",
+    inputs: [],
+    outputs: [],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    name: "finalTallyA",
+    inputs: [],
+    outputs: [{ type: "uint32" }],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    name: "finalTallyB",
+    inputs: [],
+    outputs: [{ type: "uint32" }],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    name: "isDecrypted",
+    inputs: [],
+    outputs: [{ type: "bool" }],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    name: "getEncryptedTallies",
+    inputs: [],
+    outputs: [{ type: "uint256" }, { type: "uint256" }],
+    stateMutability: "view",
+  },
+  {
+    type: "event",
+    name: "VoteCast",
+    inputs: [{ name: "voter", type: "address", indexed: true }],
+  },
+  {
+    type: "event",
+    name: "DecryptionFulfilled",
+    inputs: [
+      { name: "resultA", type: "uint32", indexed: false },
+      { name: "resultB", type: "uint32", indexed: false },
+    ],
+  },
 ] as const;
