@@ -8,6 +8,8 @@ export const PRIVATE_VOTING_ABI = [
     inputs: [
       { name: "handleA", type: "bytes32" },
       { name: "handleB", type: "bytes32" },
+      { name: "proofA", type: "bytes" },
+      { name: "proofB", type: "bytes" },
     ],
     outputs: [],
     stateMutability: "nonpayable",
@@ -100,5 +102,26 @@ export const PRIVATE_VOTING_ABI = [
       { name: "resultA", type: "uint32", indexed: false },
       { name: "resultB", type: "uint32", indexed: false },
     ],
+  },
+  {
+    type: "function",
+    name: "getEncryptedVoteCounts",
+    inputs: [],
+    outputs: [{ type: "bytes32" }, { type: "bytes32" }],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    name: "getVoteCountHandles",
+    inputs: [],
+    outputs: [{ type: "bytes32" }, { type: "bytes32" }],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    name: "requestDecryptResults",
+    inputs: [],
+    outputs: [],
+    stateMutability: "nonpayable",
   },
 ] as const;

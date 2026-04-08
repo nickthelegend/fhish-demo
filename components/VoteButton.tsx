@@ -82,16 +82,18 @@ export function VoteButton({ proposalId, vote, label, className }: {
 
       const handleA = vote === 1 ? (gatewayHandles[0] || "0x0000000000000000000000000000000000000000000000000000000000000000") : "0x0000000000000000000000000000000000000000000000000000000000000000";
       const handleB = vote === 0 ? (gatewayHandles[0] || "0x0000000000000000000000000000000000000000000000000000000000000000") : "0x0000000000000000000000000000000000000000000000000000000000000000";
+      const proofA = "0x";
+      const proofB = "0x";
       log("handleVote", "handleA (YES):", handleA.slice(0, 20), "...", handleA === "0x" + "0".repeat(64) ? "(ZERO)" : "");
       log("handleVote", "handleB (NO):", handleB.slice(0, 20), "...", handleB === "0x" + "0".repeat(64) ? "(ZERO)" : "");
 
-      log("handleVote", "Calling contract vote(handleA, handleB)...");
+      log("handleVote", "Calling contract vote(handleA, handleB, proofA, proofB)...");
       const txStart = Date.now();
       const hash = await writeContractAsync({
         address: VOTING_ADDRESS as `0x${string}`,
         abi: PRIVATE_VOTING_ABI,
         functionName: "vote",
-        args: [handleA, handleB],
+        args: [handleA, handleB, proofA, proofB],
       });
       log("handleVote", "★ Transaction submitted!");
       log("handleVote", "  txHash:", hash);
